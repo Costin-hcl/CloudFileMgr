@@ -1,16 +1,43 @@
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
+    let sasURL = await GetSAS('taskcontainer');
 
-    if (req.query.name || (req.body && req.body.name)) {
-        context.res = {
-            // status: 200, /* Defaults to 200 */
-            body: "Hello " + (req.query.name || req.body.name)
-        };
-    }
-    else {
-        context.res = {
-            status: 400,
-            body: "Please pass a name on the query string or in the request body"
-        };
-    }
+
+    context.res = {
+        // status: 200, /* Defaults to 200 */
+        body: sasURL
+    };
+
 };
+
+var azure = require('azure-storage');
+
+async function GetSAS(containerName) {
+    var blobService = azure.createBlobService();
+
+    blobService.createContainerIfNotExists(containerName, {
+        publicAccessLevel: 'blob'
+    }, function (error, result, response) {
+        if (!error) {
+            // if result = true, container was created.
+            // if result = false, container already existed.           
+        }
+    });
+
+    var startDate = new Date();
+    var expiryDate = new Date(startDate);
+    expiryDate.setMinutes(startDate.getMinutes() + 100);
+    startDate.setMinutes(startDate.getMinutes() - 100);
+
+    var sharedAccessPolicy = {
+        AccessPolicy: {
+            Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
+            Start: startDate,
+            Expiry: expiryDate
+        }
+    };
+
+    var token = blobService.generateSharedAccessSignature(containerName, undefined, sharedAccessPolicy);
+    var sasUrl = blobService.getUrl(containerName, undefined, token);
+    return sasUrl;
+}
