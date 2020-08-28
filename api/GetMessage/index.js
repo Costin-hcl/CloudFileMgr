@@ -5,7 +5,7 @@
   
     context.res = {
       body: {
-        clientPrincipal: JSON.parse(decoded)
+        clientPrincipal: JSON.parse(decoded) + "Conn str:" + process.env.AZURE_STORAGE_CONNECTION_STRING
       }
     };
   };
