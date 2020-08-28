@@ -4,9 +4,9 @@
   "description": "",
   "scripts": {
     "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "test": "echo \"No tests yet...\"",
+    "build:azure": "npm build"
   },
   "dependencies": {},
-  "devDependencies": {},
-  "build:azure": "npm build"
+  "devDependencies": {}
 }
