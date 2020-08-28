@@ -7,5 +7,6 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+  "build:azure": "npm build"
 }
