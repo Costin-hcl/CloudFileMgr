@@ -11,9 +11,9 @@ module.exports = async function (context, req) {
 };
 
 var azure = require('azure-storage');
-
+const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
 async function GetSAS(containerName) {
-    var blobService = azure.createBlobService();
+    var blobService = azure.createBlobService(connectionString);
 
     blobService.createContainerIfNotExists(containerName, {
         publicAccessLevel: 'blob'
